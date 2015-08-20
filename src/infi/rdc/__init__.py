@@ -1,7 +1,7 @@
 """rdc
 
 Usage:
-    rdc [options] <address>
+    rdc [options] <address> [<program> [<cmdline>]]
 
 Options:
     --allow-desktop-composition         allow desktop composition
@@ -19,8 +19,8 @@ Options:
     --desktop-height=<height>           custom height
     --desktop-width=<width>             custom width
     --redirect-printers                 redirect printers
-    --remote-app-cmdline=<cmdline>      remote-app
-    --remote-app-program=<program>      command-line arguments for remote-app
+    --username=<username>
+    --domain=<domain>
 
 """
 
@@ -68,17 +68,17 @@ def main(argv=sys.argv[1:]):
         url_parameters.append("desktopheight=i:{}".format(arguments['--desktop-height']))
     if arguments['--desktop-width']:
         url_parameters.append("desktopwidth=i:{}".format(arguments['--desktop-width']))
-    if arguments['--remote-app-program']:
+    if arguments['<program>']:
         url_parameters.append("remoteapplicationmode=i:1")
-        url_parameters.append("remoteapplicationprogram=s:{}".format(arguments['--remote-app-program']))
-        if arguments['--remote-app-cmdline']:
-            url_parameters.append("remoteapplicationcmdline=s:{}".format(arguments['--remote-app-cmdline']))
+        url_parameters.append("remoteapplicationprogram=s:{}".format(arguments['<program>']))
+        if arguments['<cmdline>']:
+            url_parameters.append("remoteapplicationcmdline=s:{}".format(arguments['<cmdline>']))
 
-    # if arguments['--username']:
-    #     url_parameters.append("username=s:{}".format(arguments['--username']))
-    # if arguments['--domain']:
-    #     url_parameters.append("domain=s:{}".format(arguments['--domain']))
-    # url_parameters.append("prompt for credentials on client=i:1")
+    if arguments['--username']:
+        url_parameters.append("username=s:{}".format(arguments['--username']))
+    if arguments['--domain']:
+        url_parameters.append("domain=s:{}".format(arguments['--domain']))
+    url_parameters.append("prompt for credentials on client=i:1")
 
     url_parameters.append("screen mode id=i:{}".format(_screenmode(arguments['--fullscreen'])))
     url = "rdp://{}".format("&".join(url_parameters)).replace(" ", "%20")
